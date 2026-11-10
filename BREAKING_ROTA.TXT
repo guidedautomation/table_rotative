@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<STExchangeFile>
+	<fileHeader company="Schneider Automation" product="Control Expert V15.2 - 220711" dateTime="date_and_time#2026-11-10-14:32:43" content="Structured source file" DTDVersion="41"></fileHeader>
+	<contentHeader name="Project" version="0.0.1211" dateTime="date_and_time#2026-3-9-11:50:44"></contentHeader>
+	<program>
+		<identProgram name="BREAKING_ROTA" type="section" task="MAST" SectionOrder="12"></identProgram>
+		<STSource>(*=====================================================*)
+(*   POINTS DE FREINAGE ROTATION                       *)
+(*   Ralentissement 10° avant chaque position          *)
+(*=====================================================*)
+
+(*POINT DE FREINAGE ROTATION*)
+IF (Rota.rRelativePos &lt;=10.0 AND Rota.rRelativePos &gt;=0.0 AND ATV_3A1.RUNRV) OR (Rota.rRelativePos &gt;=80.0 AND ATV_3A1.RUNFW) OR 
+(Rota.rRelativePos &lt;=-80.0 AND Rota.rRelativePos &gt;=-90.0 AND ATV_3A1.RUNRV) OR (Rota.rRelativePos&lt;=-170.0 AND ATV_3A1.RUNRV) OR
+(Rota.rRelativePos &gt;=-10.0 AND Rota.rRelativePos &lt;=0.0 AND ATV_3A1.RUNFW) THEN
+bSLOWRot:= TRUE;
+ELSE bSLOWRot:= FALSE;
+END_IF;
+
+
+(*=====================================================*)
+(*   CHANGEMENT RATIO QUAND FREINAGE                   *)
+(*   Ralentissement vitesse / 2                        *)
+(*=====================================================*)
+IF bSLOWRot THEN
+	ATV_3A1.RATIO:=0.3;
+ELSE
+	ATV_3A1.RATIO:=1.0;
+END_IF;
+</STSource>
+	</program>
+	<dataBlock>
+		<variables name="ATV_3A1" typeName="ATV">
+			<comment>ROTATION TOURELLE</comment>
+		</variables>
+		<variables name="Rota" typeName="T_AxisPosition">
+			<instanceElementDesc name="bLimitNeg">
+				<comment>Fin de course rotation anti-horaire</comment>
+			</instanceElementDesc>
+			<instanceElementDesc name="bLimitPos">
+				<comment>Fin de course rotation horaire</comment>
+			</instanceElementDesc>
+			<instanceElementDesc name="SET_POS">
+				<instanceElementDesc name="[0]">
+					<comment>Reglage position 0°</comment>
+				</instanceElementDesc>
+				<instanceElementDesc name="[1]">
+					<comment>Reglage position 90°</comment>
+				</instanceElementDesc>
+				<instanceElementDesc name="[2]">
+					<comment>Reglage position -180°</comment>
+				</instanceElementDesc>
+				<instanceElementDesc name="[3]">
+					<comment>Reglage position -90°</comment>
+				</instanceElementDesc>
+			</instanceElementDesc>
+			<instanceElementDesc name="bPOS">
+				<instanceElementDesc name="[0]">
+					<comment>Position 0°</comment>
+				</instanceElementDesc>
+				<instanceElementDesc name="[1]">
+					<comment>Position 90°</comment>
+				</instanceElementDesc>
+				<instanceElementDesc name="[2]">
+					<comment>Position -180°</comment>
+				</instanceElementDesc>
+				<instanceElementDesc name="[3]">
+					<comment>Position -90°</comment>
+				</instanceElementDesc>
+			</instanceElementDesc>
+		</variables>
+		<variables name="bSLOWRot" typeName="BOOL"></variables>
+	</dataBlock>
+	<DDTSource DDTName="ATV" version="0.11" dateTime="dt#2026-03-02-16:24:08">
+		<attribute name="TypeSignatureCheckSumString" value="3934"></attribute>
+		<structure>
+			<variables name="ENABLED" typeName="BOOL">
+				<comment>authorisation déblocage variateur</comment>
+			</variables>
+			<variables name="RUNFW" typeName="BOOL">
+				<comment>commande de marche avant</comment>
+			</variables>
+			<variables name="RUNRV" typeName="BOOL">
+				<comment>commande de marche arrière</comment>
+			</variables>
+			<variables name="FAULT" typeName="BOOL">
+				<comment>défaut variateur</comment>
+			</variables>
+			<variables name="HEALTH_BIT" typeName="BOOL">
+				<comment>bit de vie variateur</comment>
+			</variables>
+			<variables name="STATE" typeName="INT">
+				<comment>etat  drivecom</comment>
+			</variables>
+			<variables name="VBUS" typeName="BOOL">
+				<comment>variateur sous tention</comment>
+			</variables>
+			<variables name="SPEED_SETPOINT" typeName="REAL">
+				<comment>consigne de vitesse auto</comment>
+			</variables>
+			<variables name="JOG_SPEED" typeName="REAL">
+				<comment>consigne de vitesse manuelle</comment>
+			</variables>
+			<variables name="RATIO" typeName="REAL">
+				<comment>ratio vitesse</comment>
+			</variables>
+		</structure>
+	</DDTSource>
+	<DDTSource DDTName="T_AxisPosition" version="0.13" dateTime="dt#2026-03-02-10:39:22">
+		<attribute name="TypeSignatureCheckSumString" value="5A05"></attribute>
+		<structure>
+			<variables name="Value" typeName="DINT">
+				<comment>Position réelle capteur IO-Link [mm]</comment>
+			</variables>
+			<variables name="SET_POS" typeName="ARRAY[0..9] OF DINT">
+				<comment>Tableau réglage des positions cibles</comment>
+			</variables>
+			<variables name="Offset" typeName="DINT">
+				<comment>Réglage tolérance position [mm]</comment>
+			</variables>
+			<variables name="NbPositions" typeName="INT">
+				<comment>Nombre de positions configurées</comment>
+			</variables>
+			<variables name="bPOS" typeName="ARRAY[0..9] OF BOOL">
+				<comment>Tableau des positions cibles atteintes</comment>
+			</variables>
+			<variables name="iCurrentPos" typeName="INT">
+				<comment>Index position actuelle (-1 si aucune)</comment>
+			</variables>
+			<variables name="bInPos" typeName="BOOL">
+				<comment>bit au moins une position atteinte</comment>
+			</variables>
+			<variables name="bMoving" typeName="BOOL">
+				<comment>Déplacement en cours</comment>
+			</variables>
+			<variables name="bLimitPos" typeName="BOOL">
+				<comment>Fin de course +</comment>
+			</variables>
+			<variables name="bLimitNeg" typeName="BOOL">
+				<comment>Fin de course -</comment>
+			</variables>
+			<variables name="rawValue" typeName="DINT">
+				<comment>Position brute capteur IO-Link</comment>
+			</variables>
+			<variables name="HomePosition" typeName="DINT">
+				<comment>Position capteur a la prise d'origine (homing)</comment>
+			</variables>
+			<variables name="RelativePos" typeName="DINT">
+				<comment>Position relative après homing</comment>
+			</variables>
+			<variables name="bHOMED" typeName="BOOL">
+				<comment>Homing effectué</comment>
+			</variables>
+			<variables name="Setpoint" typeName="DINT">
+				<comment>Consigne de position</comment>
+			</variables>
+			<variables name="bError" typeName="BOOL">
+				<comment>erreur positionnement</comment>
+			</variables>
+			<variables name="rHomePosition" typeName="REAL">
+				<comment>Position capteur a la prise d'origine (homing) en valeur REAL</comment>
+			</variables>
+			<variables name="rRelativePos" typeName="REAL">
+				<comment>Position relative après homing en valeur REAL</comment>
+			</variables>
+		</structure>
+	</DDTSource>
+</STExchangeFile>

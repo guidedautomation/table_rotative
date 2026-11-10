@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<LDExchangeFile>
+	<fileHeader company="Schneider Automation" product="Control Expert V15.2 - 220711" dateTime="date_and_time#2026-11-10-14:33:1" content="Ladder source file" DTDVersion="41"></fileHeader>
+	<contentHeader name="Project" version="0.0.1211" dateTime="date_and_time#2026-3-9-11:50:44"></contentHeader>
+	<program>
+		<identProgram name="G7_INIT" type="section" task="MAST" SectionOrder="18"></identProgram>
+		<LDSource nbColumns="16">
+			<networkLD>
+				<typeLine>
+					<emptyLine nbRows="3"></emptyLine>
+				</typeLine>
+				<typeLine>
+					<emptyCell nbCells="4"></emptyCell>
+					<FFBBlock instanceName="TON_RAZ" typeName="TON" additionnalPinNumber="0" enEnO="false" width="10" height="4">
+						<objPosition posX="4" posY="3"></objPosition>
+						<descriptionFFB execAfter="">
+							<inputVariable invertedPin="false" formalParameter="EN"></inputVariable>
+							<inputVariable invertedPin="false" formalParameter="IN"></inputVariable>
+							<inputVariable invertedPin="false" formalParameter="PT" effectiveParameter="t#3s"></inputVariable>
+							<outputVariable invertedPin="false" formalParameter="ENO"></outputVariable>
+							<outputVariable invertedPin="false" formalParameter="Q"></outputVariable>
+							<outputVariable invertedPin="false" formalParameter="ET"></outputVariable>
+						</descriptionFFB>
+					</FFBBlock>
+					<emptyCell nbCells="10"></emptyCell>
+				</typeLine>
+				<typeLine>
+					<emptyLine nbRows="1"></emptyLine>
+				</typeLine>
+				<typeLine>
+					<contact typeContact="openContact" contactVariableName="RELAY_DCY"></contact>
+					<HLink nbCells="1"></HLink>
+					<contact typeContact="openContact" contactVariableName="hBpRAZ"></contact>
+					<HLink nbCells="1"></HLink>
+					<emptyCell nbCells="2"></emptyCell>
+					<shortCircuit>
+						<VLink></VLink>
+						<HLink nbCells="3"></HLink>
+					</shortCircuit>
+					<HLink nbCells="2"></HLink>
+					<contact typeContact="closedContact" contactVariableName="SFC_X[0]"></contact>
+					<contact typeContact="closedContact" contactVariableName="SFC_INIT[1]"></contact>
+					<HLink nbCells="2"></HLink>
+					<coil typeCoil="coil" coilVariableName="SFC_INIT[0]"></coil>
+				</typeLine>
+				<typeLine>
+					<emptyCell nbCells="8"></emptyCell>
+					<VLink></VLink>
+					<emptyCell nbCells="7"></emptyCell>
+				</typeLine>
+				<typeLine>
+					<emptyCell nbCells="8"></emptyCell>
+					<VLink></VLink>
+					<emptyCell nbCells="7"></emptyCell>
+				</typeLine>
+				<typeLine>
+					<contact typeContact="openContact" contactVariableName="SFC_INIT[0]"></contact>
+					<HLink nbCells="8"></HLink>
+					<emptyCell nbCells="7"></emptyCell>
+				</typeLine>
+				<typeLine>
+					<emptyLine nbRows="3"></emptyLine>
+				</typeLine>
+				<typeLine>
+					<contact typeContact="openContact" contactVariableName="RELAY_DCY"></contact>
+					<contact typeContact="openContact" contactVariableName="SFC_INIT[0]"></contact>
+					<contact typeContact="openContact" contactVariableName="bARM1_CLOSED"></contact>
+					<contact typeContact="openContact" contactVariableName="bARM2_CLOSED"></contact>
+					<contact typeContact="closedContact" contactVariableName="PosX.bPOS[1]"></contact>
+					<shortCircuit>
+						<VLink></VLink>
+						<HLink nbCells="1"></HLink>
+					</shortCircuit>
+					<contact typeContact="openContact" contactVariableName="TON_Y1_0.Q"></contact>
+					<HLink nbCells="1"></HLink>
+					<contact typeContact="openContact" contactVariableName="TON_Y2_0.Q"></contact>
+					<shortCircuit>
+						<VLink></VLink>
+						<HLink nbCells="1"></HLink>
+					</shortCircuit>
+					<HLink nbCells="1"></HLink>
+					<contact typeContact="closedContact" contactVariableName="SFC_INIT[2]"></contact>
+					<contact typeContact="closedContact" contactVariableName="SFC_X[0]"></contact>
+					<HLink nbCells="2"></HLink>
+					<coil typeCoil="coil" coilVariableName="SFC_INIT[1]"></coil>
+				</typeLine>
+				<typeLine>
+					<emptyCell nbCells="6"></emptyCell>
+					<HLink nbCells="1"></HLink>
+					<contact typeContact="openContact" contactVariableName="PosY1.bLimitPos"></contact>
+					<shortCircuit>
+						<VLink></VLink>
+						<HLink nbCells="2"></HLink>
+					</shortCircuit>
+					<emptyCell nbCells="6"></emptyCell>
+				</typeLine>
+				<typeLine>
+					<contact typeContact="openContact" contactVariableName="SFC_INIT[1]"></contact>
+					<HLink nbCells="9"></HLink>
+					<emptyCell nbCells="6"></emptyCell>
+				</typeLine>
+				<typeLine>
+					<emptyLine nbRows="3"></emptyLine>
+				</typeLine>
+				<typeLine>
+					<shortCircuit>
+						<VLink></VLink>
+						<contact typeContact="openContact" contactVariableName="RELAY_DCY"></contact>
+					</shortCircuit>
+					<contact typeContact="openContact" contactVariableName="SFC_INIT[1]"></contact>
+					<shortCircuit>
+						<VLink></VLink>
+						<HLink nbCells="2"></HLink>
+					</shortCircuit>
+					<contact typeContact="openContact" contactVariableName="TON_X1.Q"></contact>
+					<shortCircuit>
+						<VLink></VLink>
+						<HLink nbCells="4"></HLink>
+					</shortCircuit>
+					<HLink nbCells="2"></HLink>
+					<contact typeContact="closedContact" contactVariableName="SFC_INIT[3]"></contact>
+					<contact typeContact="closedContact" contactVariableName="SFC_X[0]"></contact>
+					<HLink nbCells="2"></HLink>
+					<coil typeCoil="coil" coilVariableName="SFC_INIT[2]"></coil>
+				</typeLine>
+				<typeLine>
+					<emptyCell nbCells="1"></emptyCell>
+					<contact typeContact="openContact" contactVariableName="SFC_INIT[0]"></contact>
+					<contact typeContact="openContact" contactVariableName="PosX.bPOS[1]"></contact>
+					<HLink nbCells="1"></HLink>
+					<emptyCell nbCells="4"></emptyCell>
+					<VLink></VLink>
+					<emptyCell nbCells="7"></emptyCell>
+				</typeLine>
+				<typeLine>
+					<contact typeContact="openContact" contactVariableName="SFC_INIT[2]"></contact>
+					<HLink nbCells="8"></HLink>
+					<emptyCell nbCells="7"></emptyCell>
+				</typeLine>
+				<typeLine>
+					<emptyLine nbRows="3"></emptyLine>
+				</typeLine>
+				<typeLine>
+					<shortCircuit>
+						<VLink></VLink>
+						<contact typeContact="openContact" contactVariableName="RELAY_DCY"></contact>
+					</shortCircuit>
+					<contact typeContact="openContact" contactVariableName="SFC_INIT[2]"></contact>
+					<shortCircuit>
+						<VLink></VLink>
+						<HLink nbCells="1"></HLink>
+					</shortCircuit>
+					<HLink nbCells="1"></HLink>
+					<contact typeContact="openContact" contactVariableName="Rota.bPOS[0]"></contact>
+					<HLink nbCells="2"></HLink>
+					<contact typeContact="openContact" contactVariableName="Rota.rRelativePos&gt;=0.0"></contact>
+					<shortCircuit>
+						<VLink></VLink>
+						<HLink nbCells="4"></HLink>
+					</shortCircuit>
+					<contact typeContact="closedContact" contactVariableName="SFC_X[0]"></contact>
+					<HLink nbCells="2"></HLink>
+					<coil typeCoil="coil" coilVariableName="SFC_INIT[3]"></coil>
+				</typeLine>
+				<typeLine>
+					<emptyCell nbCells="1"></emptyCell>
+					<contact typeContact="openContact" contactVariableName="SFC_INIT[0]"></contact>
+					<HLink nbCells="1"></HLink>
+					<emptyCell nbCells="8"></emptyCell>
+					<VLink></VLink>
+					<emptyCell nbCells="4"></emptyCell>
+				</typeLine>
+				<typeLine>
+					<contact typeContact="openContact" contactVariableName="SFC_INIT[3]"></contact>
+					<HLink nbCells="11"></HLink>
+					<emptyCell nbCells="4"></emptyCell>
+				</typeLine>
+				<typeLine>
+					<emptyLine nbRows="74"></emptyLine>
+				</typeLine>
+				<textBox width="10" height="1">ETAPE 1 TRANSLATION  SI  BESOIN DE ROTATION<objPosition posX="3" posY="10"></objPosition>
+				</textBox>
+				<textBox width="10" height="1">ETAPE 2 ROTATION EN POSITION 0°<objPosition posX="3" posY="16"></objPosition>
+				</textBox>
+				<textBox width="10" height="1">ETAPE 3 TRANSLATION  VERS CHARGEMENT 0cm<objPosition posX="3" posY="22"></objPosition>
+				</textBox>
+				<textBox width="10" height="1">DEMANDE DE RAZ CYCLE ETAPE 0 FERMETURE ET BLOCAGE BRAS ET REMONTEE DES BRAS<objPosition posX="3" posY="1"></objPosition>
+				</textBox>
+			</networkLD>
+		</LDSource>
+	</program>
+	<dataBlock>
+		<variables name="RELAY_DCY" typeName="BOOL">
+			<comment>RELAIS MARCHE CYCLE</comment>
+		</variables>
+		<variables name="hBpRAZ" typeName="BOOL" topologicalAddress="%MW110.15">
+			<comment>remise a zéro cycle retour position initiale</comment>
+		</variables>
+		<variables name="SFC_X" typeName="ARRAY[0..15] OF EBOOL">
+			<instanceElementDesc name="[1]">
+				<comment>Etape "chargement balle"</comment>
+			</instanceElementDesc>
+			<instanceElementDesc name="[7]">
+				<comment>Etape "Attente appel balle teilleuse pour dechargement"</comment>
+			</instanceElementDesc>
+			<instanceElementDesc name="[0]">
+				<comment>Etape initiale conditions initiales de départ cycle</comment>
+			</instanceElementDesc>
+			<instanceElementDesc name="[2]">
+				<comment>Etape "Positionnement de la table en position centrale + fermeture bras 1"</comment>
+			</instanceElementDesc>
+			<instanceElementDesc name="[3]">
+				<comment>Etape "Rotation table fonction du sens de chargement + descente bras"</comment>
+			</instanceElementDesc>
+			<instanceElementDesc name="[4]">
+				<comment>Etape "Préparation ficelle opérateur/marche tapis"</comment>
+			</instanceElementDesc>
+			<instanceElementDesc name="[5]">
+				<comment>Etape "Rotation retour 0° / -180° vers dechargement + montee bras"</comment>
+			</instanceElementDesc>
+			<instanceElementDesc name="[6]">
+				<comment>Etape "Translation vers position déchargement et ouverture bras"</comment>
+			</instanceElementDesc>
+			<instanceElementDesc name="[9]">
+				<comment>Etape "Rotation retour 0° quand table -180° de balle inverseé"</comment>
+			</instanceElementDesc>
+			<instanceElementDesc name="[10]">
+				<comment>Etape "Retour en position 0 X chagement"</comment>
+			</instanceElementDesc>
+			<instanceElementDesc name="[8]">
+				<comment>Etape "Retour en position milieu si besoin de rotation"</comment>
+			</instanceElementDesc>
+			<instanceElementDesc name="[12]">
+				<comment>Etape "Ejection balle par porte arrière"</comment>
+			</instanceElementDesc>
+		</variables>
+		<variables name="TON_X1" typeName="TON"></variables>
+		<variables name="bARM1_CLOSED" typeName="BOOL">
+			<comment>vérification bras 1 fermé bloqué</comment>
+		</variables>
+		<variables name="TON_RAZ" typeName="TON">
+			<comment>Tempo demande de reinit grafcet</comment>
+		</variables>
+		<variables name="PosX" typeName="T_AxisPosition">
+			<instanceElementDesc name="bPOS">
+				<instanceElementDesc name="[0]">
+					<comment>Position chargement</comment>
+				</instanceElementDesc>
+				<instanceElementDesc name="[1]">
+					<comment>Position centrale</comment>
+				</instanceElementDesc>
+				<instanceElementDesc name="[2]">
+					<comment>Position déchargement</comment>
+				</instanceElementDesc>
+			</instanceElementDesc>
+			<instanceElementDesc name="SET_POS">
+				<instanceElementDesc name="[0]">
+					<comment>Réglage valeur position chargement</comment>
+				</instanceElementDesc>
+				<instanceElementDesc name="[1]">
+					<comment>Réglage valeur position centrale</comment>
+				</instanceElementDesc>
+				<instanceElementDesc name="[2]">
+					<comment>Réglage valeur position déchargement</comment>
+				</instanceElementDesc>
+			</instanceElementDesc>
+			<instanceElementDesc name="Value">
+				<comment>valeur convertie mm capteur lineaire axe X </comment>
+			</instanceElementDesc>
+			<instanceElementDesc name="Offset">
+				<comment>réglage offset axe X</comment>
+			</instanceElementDesc>
+		</variables>
+		<variables name="Rota" typeName="T_AxisPosition">
+			<instanceElementDesc name="bLimitNeg">
+				<comment>Fin de course rotation anti-horaire</comment>
+			</instanceElementDesc>
+			<instanceElementDesc name="bLimitPos">
+				<comment>Fin de course rotation horaire</comment>
+			</instanceElementDesc>
+			<instanceElementDesc name="SET_POS">
+				<instanceElementDesc name="[0]">
+					<comment>Reglage position 0°</comment>
+				</instanceElementDesc>
+				<instanceElementDesc name="[1]">
+					<comment>Reglage position 90°</comment>
+				</instanceElementDesc>
+				<instanceElementDesc name="[2]">
+					<comment>Reglage position -180°</comment>
+				</instanceElementDesc>
+				<instanceElementDesc name="[3]">
+					<comment>Reglage position -90°</comment>
+				</instanceElementDesc>
+			</instanceElementDesc>
+			<instanceElementDesc name="bPOS">
+				<instanceElementDesc name="[0]">
+					<comment>Position 0°</comment>
+				</instanceElementDesc>
+				<instanceElementDesc name="[1]">
+					<comment>Position 90°</comment>
+				</instanceElementDesc>
+				<instanceElementDesc name="[2]">
+					<comment>Position -180°</comment>
+				</instanceElementDesc>
+				<instanceElementDesc name="[3]">
+					<comment>Position -90°</comment>
+				</instanceElementDesc>
+			</instanceElementDesc>
+		</variables>
+		<variables name="TON_Y1_0" typeName="TON"></variables>
+		<variables name="TON_Y2_0" typeName="TON"></variables>
+		<variables name="bARM2_CLOSED" typeName="BOOL">
+			<comment>vérification bras 2 fermé bloqué</comment>
+		</variables>
+		<variables name="PosY1" typeName="T_AxisPosition">
+			<instanceElementDesc name="bLimitNeg">
+				<comment>Fin de course haut</comment>
+			</instanceElementDesc>
+			<instanceElementDesc name="bLimitPos">
+				<comment>Fin de course bas</comment>
+			</instanceElementDesc>
+		</variables>
+		<variables name="SFC_INIT" typeName="ARRAY[0..15] OF EBOOL"></variables>
+	</dataBlock>
+	<DDTSource DDTName="T_AxisPosition" version="0.13" dateTime="dt#2026-03-02-10:39:22">
+		<attribute name="TypeSignatureCheckSumString" value="5A05"></attribute>
+		<structure>
+			<variables name="Value" typeName="DINT">
+				<comment>Position réelle capteur IO-Link [mm]</comment>
+			</variables>
+			<variables name="SET_POS" typeName="ARRAY[0..9] OF DINT">
+				<comment>Tableau réglage des positions cibles</comment>
+			</variables>
+			<variables name="Offset" typeName="DINT">
+				<comment>Réglage tolérance position [mm]</comment>
+			</variables>
+			<variables name="NbPositions" typeName="INT">
+				<comment>Nombre de positions configurées</comment>
+			</variables>
+			<variables name="bPOS" typeName="ARRAY[0..9] OF BOOL">
+				<comment>Tableau des positions cibles atteintes</comment>
+			</variables>
+			<variables name="iCurrentPos" typeName="INT">
+				<comment>Index position actuelle (-1 si aucune)</comment>
+			</variables>
+			<variables name="bInPos" typeName="BOOL">
+				<comment>bit au moins une position atteinte</comment>
+			</variables>
+			<variables name="bMoving" typeName="BOOL">
+				<comment>Déplacement en cours</comment>
+			</variables>
+			<variables name="bLimitPos" typeName="BOOL">
+				<comment>Fin de course +</comment>
+			</variables>
+			<variables name="bLimitNeg" typeName="BOOL">
+				<comment>Fin de course -</comment>
+			</variables>
+			<variables name="rawValue" typeName="DINT">
+				<comment>Position brute capteur IO-Link</comment>
+			</variables>
+			<variables name="HomePosition" typeName="DINT">
+				<comment>Position capteur a la prise d'origine (homing)</comment>
+			</variables>
+			<variables name="RelativePos" typeName="DINT">
+				<comment>Position relative après homing</comment>
+			</variables>
+			<variables name="bHOMED" typeName="BOOL">
+				<comment>Homing effectué</comment>
+			</variables>
+			<variables name="Setpoint" typeName="DINT">
+				<comment>Consigne de position</comment>
+			</variables>
+			<variables name="bError" typeName="BOOL">
+				<comment>erreur positionnement</comment>
+			</variables>
+			<variables name="rHomePosition" typeName="REAL">
+				<comment>Position capteur a la prise d'origine (homing) en valeur REAL</comment>
+			</variables>
+			<variables name="rRelativePos" typeName="REAL">
+				<comment>Position relative après homing en valeur REAL</comment>
+			</variables>
+		</structure>
+	</DDTSource>
+</LDExchangeFile>

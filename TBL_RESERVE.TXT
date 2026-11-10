@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<LDExchangeFile>
+	<fileHeader company="Schneider Automation" product="Control Expert V15.2 - 220711" dateTime="date_and_time#2026-11-10-14:2:22" content="Ladder source file" DTDVersion="41"></fileHeader>
+	<contentHeader name="Project" version="0.0.1211" dateTime="date_and_time#2026-3-9-11:50:44"></contentHeader>
+	<program>
+		<identProgram name="TBL_RESERVE" type="section" task="MAST" SectionOrder="6"></identProgram>
+		<LDSource nbColumns="16">
+			<networkLD>
+				<typeLine>
+					<emptyLine nbRows="3"></emptyLine>
+				</typeLine>
+				<typeLine>
+					<shortCircuit>
+						<VLink></VLink>
+						<contact typeContact="openContact" contactVariableName="RELAY_DCY"></contact>
+					</shortCircuit>
+					<shortCircuit>
+						<VLink></VLink>
+						<contact typeContact="openContact" contactVariableName="iBp32S2"></contact>
+					</shortCircuit>
+					<shortCircuit>
+						<VLink></VLink>
+						<contact typeContact="openContact" contactVariableName="PosX.bPOS[0]"></contact>
+					</shortCircuit>
+					<contact typeContact="openContact" contactVariableName="SFC_X[0]"></contact>
+					<HLink nbCells="1"></HLink>
+					<contact typeContact="closedContact" contactVariableName="bPB_RES"></contact>
+					<shortCircuit>
+						<VLink></VLink>
+						<HLink nbCells="6"></HLink>
+					</shortCircuit>
+					<emptyCell nbCells="4"></emptyCell>
+				</typeLine>
+				<typeLine>
+					<emptyCell nbCells="1"></emptyCell>
+					<contact typeContact="openContact" contactVariableName="hAUTOCharge"></contact>
+					<VLink></VLink>
+					<emptyCell nbCells="6"></emptyCell>
+					<FFBBlock instanceName="TON_DELAY_RESERVE" typeName="TON" additionnalPinNumber="0" enEnO="false" width="10" height="4">
+						<objPosition posX="9" posY="4"></objPosition>
+						<descriptionFFB execAfter="">
+							<inputVariable invertedPin="false" formalParameter="EN"></inputVariable>
+							<inputVariable invertedPin="false" formalParameter="IN"></inputVariable>
+							<inputVariable invertedPin="false" formalParameter="PT" effectiveParameter="t#1s"></inputVariable>
+							<outputVariable invertedPin="false" formalParameter="ENO"></outputVariable>
+							<outputVariable invertedPin="false" formalParameter="Q"></outputVariable>
+							<outputVariable invertedPin="false" formalParameter="ET"></outputVariable>
+						</descriptionFFB>
+					</FFBBlock>
+					<VLink></VLink>
+					<emptyCell nbCells="4"></emptyCell>
+				</typeLine>
+				<typeLine>
+					<emptyCell nbCells="2"></emptyCell>
+					<VLink></VLink>
+					<emptyCell nbCells="8"></emptyCell>
+					<VLink></VLink>
+					<emptyCell nbCells="4"></emptyCell>
+				</typeLine>
+				<typeLine>
+					<emptyCell nbCells="3"></emptyCell>
+					<contact typeContact="openContact" contactVariableName="SFC_X[1]"></contact>
+					<contact typeContact="openContact" contactVariableName="iARM1_OPENED"></contact>
+					<HLink nbCells="1"></HLink>
+					<contact typeContact="closedContact" contactVariableName="iPB_PREP"></contact>
+					<contact typeContact="openContact" contactVariableName="ATV_4A2.RUNFW"></contact>
+					<HLink nbCells="1"></HLink>
+					<emptyCell nbCells="2"></emptyCell>
+					<HLink nbCells="1"></HLink>
+					<shortCircuit>
+						<VLink></VLink>
+						<HLink nbCells="2"></HLink>
+					</shortCircuit>
+					<HLink nbCells="1"></HLink>
+					<coil typeCoil="coil" coilVariableName="bRun_RES"></coil>
+				</typeLine>
+				<typeLine>
+					<emptyCell nbCells="14"></emptyCell>
+					<HLink nbCells="1"></HLink>
+					<coil typeCoil="coil" coilVariableName="qXTP15"></coil>
+				</typeLine>
+				<typeLine>
+					<emptyLine nbRows="1"></emptyLine>
+				</typeLine>
+				<typeLine>
+					<emptyCell nbCells="3"></emptyCell>
+					<FFBBlock instanceName="TON_PB_RESERVE" typeName="TON" additionnalPinNumber="0" enEnO="false" width="10" height="4">
+						<objPosition posX="3" posY="9"></objPosition>
+						<descriptionFFB execAfter="">
+							<inputVariable invertedPin="false" formalParameter="EN"></inputVariable>
+							<inputVariable invertedPin="false" formalParameter="IN"></inputVariable>
+							<inputVariable invertedPin="false" formalParameter="PT" effectiveParameter="INT_TO_TIME(hsetTimeTON_0)*100"></inputVariable>
+							<outputVariable invertedPin="false" formalParameter="ENO"></outputVariable>
+							<outputVariable invertedPin="false" formalParameter="Q"></outputVariable>
+							<outputVariable invertedPin="false" formalParameter="ET"></outputVariable>
+						</descriptionFFB>
+					</FFBBlock>
+					<emptyCell nbCells="11"></emptyCell>
+				</typeLine>
+				<typeLine>
+					<emptyLine nbRows="1"></emptyLine>
+				</typeLine>
+				<typeLine>
+					<HLink nbCells="1"></HLink>
+					<contact typeContact="openContact" contactVariableName="iPB_RES"></contact>
+					<HLink nbCells="1"></HLink>
+					<emptyCell nbCells="2"></emptyCell>
+					<HLink nbCells="1"></HLink>
+					<coil typeCoil="coil" coilVariableName="bPB_RES"></coil>
+					<emptyCell nbCells="9"></emptyCell>
+				</typeLine>
+				<typeLine>
+					<emptyLine nbRows="5"></emptyLine>
+				</typeLine>
+				<typeLine>
+					<contact typeContact="openContact" contactVariableName="RELAY_DCY"></contact>
+					<HLink nbCells="1"></HLink>
+					<contact typeContact="openContact" contactVariableName="SFC_X[7]"></contact>
+					<HLink nbCells="12"></HLink>
+					<coil typeCoil="coil" coilVariableName="qXTP17"></coil>
+				</typeLine>
+				<typeLine>
+					<emptyLine nbRows="82"></emptyLine>
+				</typeLine>
+				<textBox width="8" height="1">Demande de mise en route de la table de reserve par la teilleuse: -Si pas de balle devant cellule table de reserve ou Si demande de chargement dans la tourelle<objPosition posX="4" posY="1"></objPosition>
+				</textBox>
+			</networkLD>
+		</LDSource>
+	</program>
+	<dataBlock>
+		<variables name="RELAY_DCY" typeName="BOOL">
+			<comment>RELAIS MARCHE CYCLE</comment>
+		</variables>
+		<variables name="iPB_RES" typeName="BOOL">
+			<comment>IOL capteur présence balle table de reserve devant table de préparation</comment>
+		</variables>
+		<variables name="TON_PB_RESERVE" typeName="TON">
+			<comment>Tempo présence balle table de réserve</comment>
+		</variables>
+		<variables name="TON_DELAY_RESERVE" typeName="TON">
+			<comment>Tempo delais de marche table de reserve</comment>
+		</variables>
+		<variables name="SFC_X" typeName="ARRAY[0..15] OF EBOOL">
+			<instanceElementDesc name="[1]">
+				<comment>Etape "chargement balle"</comment>
+			</instanceElementDesc>
+			<instanceElementDesc name="[7]">
+				<comment>Etape "Attente appel balle teilleuse pour dechargement"</comment>
+			</instanceElementDesc>
+			<instanceElementDesc name="[0]">
+				<comment>Etape initiale conditions initiales de départ cycle</comment>
+			</instanceElementDesc>
+			<instanceElementDesc name="[2]">
+				<comment>Etape "Positionnement de la table en position centrale + fermeture bras 1"</comment>
+			</instanceElementDesc>
+			<instanceElementDesc name="[3]">
+				<comment>Etape "Rotation table fonction du sens de chargement + descente bras"</comment>
+			</instanceElementDesc>
+			<instanceElementDesc name="[4]">
+				<comment>Etape "Préparation ficelle opérateur/marche tapis"</comment>
+			</instanceElementDesc>
+			<instanceElementDesc name="[5]">
+				<comment>Etape "Rotation retour 0° / -180° vers dechargement + montee bras"</comment>
+			</instanceElementDesc>
+			<instanceElementDesc name="[6]">
+				<comment>Etape "Translation vers position déchargement et ouverture bras"</comment>
+			</instanceElementDesc>
+			<instanceElementDesc name="[9]">
+				<comment>Etape "Rotation retour 0° quand table -180° de balle inverseé"</comment>
+			</instanceElementDesc>
+			<instanceElementDesc name="[10]">
+				<comment>Etape "Retour en position 0 X chagement"</comment>
+			</instanceElementDesc>
+			<instanceElementDesc name="[8]">
+				<comment>Etape "Retour en position milieu si besoin de rotation"</comment>
+			</instanceElementDesc>
+			<instanceElementDesc name="[12]">
+				<comment>Etape "Ejection balle par porte arrière"</comment>
+			</instanceElementDesc>
+		</variables>
+		<variables name="bRun_RES" typeName="BOOL">
+			<comment>bit demande de marche table de reserve de la teilleuse (chargement balle)</comment>
+		</variables>
+		<variables name="ATV_4A2" typeName="ATV">
+			<comment>TAPIS</comment>
+		</variables>
+		<variables name="PosX" typeName="T_AxisPosition">
+			<instanceElementDesc name="bPOS">
+				<instanceElementDesc name="[0]">
+					<comment>Position chargement</comment>
+				</instanceElementDesc>
+				<instanceElementDesc name="[1]">
+					<comment>Position centrale</comment>
+				</instanceElementDesc>
+				<instanceElementDesc name="[2]">
+					<comment>Position déchargement</comment>
+				</instanceElementDesc>
+			</instanceElementDesc>
+			<instanceElementDesc name="SET_POS">
+				<instanceElementDesc name="[0]">
+					<comment>Réglage valeur position chargement</comment>
+				</instanceElementDesc>
+				<instanceElementDesc name="[1]">
+					<comment>Réglage valeur position centrale</comment>
+				</instanceElementDesc>
+				<instanceElementDesc name="[2]">
+					<comment>Réglage valeur position déchargement</comment>
+				</instanceElementDesc>
+			</instanceElementDesc>
+			<instanceElementDesc name="Value">
+				<comment>valeur convertie mm capteur lineaire axe X </comment>
+			</instanceElementDesc>
+			<instanceElementDesc name="Offset">
+				<comment>réglage offset axe X</comment>
+			</instanceElementDesc>
+		</variables>
+		<variables name="qXTP17" typeName="EBOOL">
+			<comment>Sortie pour voyant OK demande balle de préparation vers dérouleur</comment>
+		</variables>
+		<variables name="iBp32S2" typeName="EBOOL">
+			<comment>Entrée "Appel balle" venant de la table de reserve</comment>
+		</variables>
+		<variables name="iARM1_OPENED" typeName="BOOL">
+			<comment>IOL état capteur vérin bras 1 ouvert</comment>
+		</variables>
+		<variables name="hsetTimeTON_0" typeName="INT" topologicalAddress="%MW70">
+			<comment>HMI réglage tempo présence balle table de réserve</comment>
+		</variables>
+		<variables name="qXTP15" typeName="EBOOL">
+			<comment>Sortie "Demande de marche table de reserve"</comment>
+		</variables>
+		<variables name="bPB_RES" typeName="BOOL">
+			<comment>Présence balle table de reserve (tempo capteur)</comment>
+		</variables>
+		<variables name="iPB_PREP" typeName="BOOL">
+			<comment>IOL capteur présence balle sur table de préparation "tourelle"</comment>
+		</variables>
+		<variables name="hAUTOCharge" typeName="BOOL" topologicalAddress="%MW111.0">
+			<comment>HMI selection chargement automatique / semi auto</comment>
+		</variables>
+	</dataBlock>
+	<DDTSource DDTName="ATV" version="0.11" dateTime="dt#2026-03-02-16:24:08">
+		<attribute name="TypeSignatureCheckSumString" value="3934"></attribute>
+		<structure>
+			<variables name="ENABLED" typeName="BOOL">
+				<comment>authorisation déblocage variateur</comment>
+			</variables>
+			<variables name="RUNFW" typeName="BOOL">
+				<comment>commande de marche avant</comment>
+			</variables>
+			<variables name="RUNRV" typeName="BOOL">
+				<comment>commande de marche arrière</comment>
+			</variables>
+			<variables name="FAULT" typeName="BOOL">
+				<comment>défaut variateur</comment>
+			</variables>
+			<variables name="HEALTH_BIT" typeName="BOOL">
+				<comment>bit de vie variateur</comment>
+			</variables>
+			<variables name="STATE" typeName="INT">
+				<comment>etat  drivecom</comment>
+			</variables>
+			<variables name="VBUS" typeName="BOOL">
+				<comment>variateur sous tention</comment>
+			</variables>
+			<variables name="SPEED_SETPOINT" typeName="REAL">
+				<comment>consigne de vitesse auto</comment>
+			</variables>
+			<variables name="JOG_SPEED" typeName="REAL">
+				<comment>consigne de vitesse manuelle</comment>
+			</variables>
+			<variables name="RATIO" typeName="REAL">
+				<comment>ratio vitesse</comment>
+			</variables>
+		</structure>
+	</DDTSource>
+	<DDTSource DDTName="T_AxisPosition" version="0.13" dateTime="dt#2026-03-02-10:39:22">
+		<attribute name="TypeSignatureCheckSumString" value="5A05"></attribute>
+		<structure>
+			<variables name="Value" typeName="DINT">
+				<comment>Position réelle capteur IO-Link [mm]</comment>
+			</variables>
+			<variables name="SET_POS" typeName="ARRAY[0..9] OF DINT">
+				<comment>Tableau réglage des positions cibles</comment>
+			</variables>
+			<variables name="Offset" typeName="DINT">
+				<comment>Réglage tolérance position [mm]</comment>
+			</variables>
+			<variables name="NbPositions" typeName="INT">
+				<comment>Nombre de positions configurées</comment>
+			</variables>
+			<variables name="bPOS" typeName="ARRAY[0..9] OF BOOL">
+				<comment>Tableau des positions cibles atteintes</comment>
+			</variables>
+			<variables name="iCurrentPos" typeName="INT">
+				<comment>Index position actuelle (-1 si aucune)</comment>
+			</variables>
+			<variables name="bInPos" typeName="BOOL">
+				<comment>bit au moins une position atteinte</comment>
+			</variables>
+			<variables name="bMoving" typeName="BOOL">
+				<comment>Déplacement en cours</comment>
+			</variables>
+			<variables name="bLimitPos" typeName="BOOL">
+				<comment>Fin de course +</comment>
+			</variables>
+			<variables name="bLimitNeg" typeName="BOOL">
+				<comment>Fin de course -</comment>
+			</variables>
+			<variables name="rawValue" typeName="DINT">
+				<comment>Position brute capteur IO-Link</comment>
+			</variables>
+			<variables name="HomePosition" typeName="DINT">
+				<comment>Position capteur a la prise d'origine (homing)</comment>
+			</variables>
+			<variables name="RelativePos" typeName="DINT">
+				<comment>Position relative après homing</comment>
+			</variables>
+			<variables name="bHOMED" typeName="BOOL">
+				<comment>Homing effectué</comment>
+			</variables>
+			<variables name="Setpoint" typeName="DINT">
+				<comment>Consigne de position</comment>
+			</variables>
+			<variables name="bError" typeName="BOOL">
+				<comment>erreur positionnement</comment>
+			</variables>
+			<variables name="rHomePosition" typeName="REAL">
+				<comment>Position capteur a la prise d'origine (homing) en valeur REAL</comment>
+			</variables>
+			<variables name="rRelativePos" typeName="REAL">
+				<comment>Position relative après homing en valeur REAL</comment>
+			</variables>
+		</structure>
+	</DDTSource>
+</LDExchangeFile>

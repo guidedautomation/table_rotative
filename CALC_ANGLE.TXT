@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<STExchangeFile>
+	<fileHeader company="Schneider Automation" product="Control Expert V15.2 - 220711" dateTime="date_and_time#2026-11-10-14:32:46" content="Structured source file" DTDVersion="41"></fileHeader>
+	<contentHeader name="Project" version="0.0.1211" dateTime="date_and_time#2026-3-9-11:50:44"></contentHeader>
+	<program>
+		<identProgram name="CALC_ANGLE" type="section" task="MAST" SectionOrder="13"></identProgram>
+		<STSource>(*=====================================================*)
+(* GESTION POSITIONS ROTATION - 4 POSITIONS           *)
+(* Pos 0: 0° (origine)                                *)
+(* Pos 1: +90° (quart tour horaire)                   *)
+(* Pos 2: -90° (quart tour anti-horaire)              *)
+(* Pos 3: -180° (demi-tour)                           *)
+(*=====================================================*)
+
+(*=== PARAMETRES SYSTEME ===*)
+RESOLUTION_CODEUR_PTOUR  := 65536;        (* RMA300 16 bits/tour *)
+RATIO_REDUCTEUR  := 7.23;                 (* Réducteur 7.23:1 *)
+POINTS_PAR_TOUR_BALLE  := 473825;         (* 65536 × 7.23 *)
+
+rRatioRotation:=360.0 / 420000.0;                          (* °/point *)
+
+
+(*=== CALCUL POINTS POUR 90° ===*)
+ANGLE_QUART_TOUR  := 90.0;
+(*POINTS_PAR_QUART_TOUR                    (* 118 456 pts = 90° *)
+rAngle:=rRatioRotation*(DINT_TO_REAL(Rota.RawValue));
+hAngle:=Rota.rRelativePos;
+hPT_CODEUR:=Rota.RawValue;
+
+
+(* ============================================================================ *)
+(*                    GESTION POSITIONNEMENT ROTATION                           *)
+(*                    Rotation Cage - Table de préparation                      *)
+(* ============================================================================ *)
+
+(* ============================================================================ *)
+(* INITIALISATION ROTATION - REGLAGE POSITION VIA HMI         		        *)
+(* ============================================================================ *)
+
+(* Configuration des positions cibles *)
+Rota.SET_POS[0]  := hSET_ANGLE[0];                 (* Position 0° : Chargement/déchargement balle *)
+Rota.SET_POS[1]  := hSET_ANGLE[1];                 (* Position 90° : Préparation ficelle *)
+Rota.SET_POS[2]  := hSET_ANGLE[2];                 (* Position -180° : Déchargement inversée balle *)
+Rota.SET_POS[3]  := hSET_ANGLE[3];                 (* Position -90° : Préparation inversée ficelle *)
+Rota.Offset	 := hOffset_ANGLE;		   (* Offset angle *)
+
+
+DFB_POSITION_DETECTOR_ROTA (
+    
+    (* ======================================================================== *)
+    (* MESURE ET CONFIGURATION                                                  *)
+    (* ======================================================================== *)
+    ActualPosition := REAL_TO_DINT(Rota.rRelativePos),        	 (* Position réelle capteur IO-Link [°] *)
+    TargetPositions := Rota.SET_POS,    	 		 (* Tableau positions cibles [0]=0°, [1]=90°, [2]=-180°, [3]=-90° *)
+    NbTargets := 4,                              		 (* Nombre de positions configurées *)
+    RunFW := ATV_3A1.RUNFW(*BOOL*),
+    RunRV := ATV_3A1.RUNRV(*BOOL*),
+    
+    (* ======================================================================== *)
+    (* TOLÉRANCES ET FENÊTRES DE DÉTECTION                                      *)
+    (* ======================================================================== *)
+    Tolerance := Rota.Offset,                   (* Fenêtre validation position : ±5mm *)
+  
+   
+    (* ======================================================================== *)
+    (* SORTIES - ÉTATS MOUVEMENT ET DIAGNOSTIC                                  *)
+    (* ======================================================================== *)
+    InPosition =&gt;Rota.bPOS,
+    (*CurrentPosition =&gt;*)
+    (*AnyPositionReached =&gt;*)
+    Moving =&gt; Rota.bMoving                 (* Mouvement en cours *)
+
+);
+
+</STSource>
+	</program>
+	<dataBlock>
+		<variables name="ANGLE_QUART_TOUR" typeName="REAL"></variables>
+		<variables name="hOffset_ANGLE" typeName="DINT" topologicalAddress="%MW606"></variables>
+		<variables name="POINTS_PAR_TOUR_BALLE" typeName="DINT"></variables>
+		<variables name="RESOLUTION_CODEUR_PTOUR" typeName="DINT"></variables>
+		<variables name="hPT_CODEUR" typeName="DINT" topologicalAddress="%MW610"></variables>
+		<variables name="rRatioRotation" typeName="REAL"></variables>
+		<variables name="ATV_3A1" typeName="ATV">
+			<comment>ROTATION TOURELLE</comment>
+		</variables>
+		<variables name="Rota" typeName="T_AxisPosition">
+			<instanceElementDesc name="bLimitNeg">
+				<comment>Fin de course rotation anti-horaire</comment>
+			</instanceElementDesc>
+			<instanceElementDesc name="bLimitPos">
+				<comment>Fin de course rotation horaire</comment>
+			</instanceElementDesc>
+			<instanceElementDesc name="SET_POS">
+				<instanceElementDesc name="[0]">
+					<comment>Reglage position 0°</comment>
+				</instanceElementDesc>
+				<instanceElementDesc name="[1]">
+					<comment>Reglage position 90°</comment>
+				</instanceElementDesc>
+				<instanceElementDesc name="[2]">
+					<comment>Reglage position -180°</comment>
+				</instanceElementDesc>
+				<instanceElementDesc name="[3]">
+					<comment>Reglage position -90°</comment>
+				</instanceElementDesc>
+			</instanceElementDesc>
+			<instanceElementDesc name="bPOS">
+				<instanceElementDesc name="[0]">
+					<comment>Position 0°</comment>
+				</instanceElementDesc>
+				<instanceElementDesc name="[1]">
+					<comment>Position 90°</comment>
+				</instanceElementDesc>
+				<instanceElementDesc name="[2]">
+					<comment>Position -180°</comment>
+				</instanceElementDesc>
+				<instanceElementDesc name="[3]">
+					<comment>Position -90°</comment>
+				</instanceElementDesc>
+			</instanceElementDesc>
+		</variables>
+		<variables name="rAngle" typeName="REAL">
+			<comment>Equivalence angulaire de la rotation</comment>
+		</variables>
+		<variables name="RATIO_REDUCTEUR" typeName="REAL"></variables>
+		<variables name="hSET_ANGLE" typeName="ARRAY[0..3] OF DINT" topologicalAddress="%MW612">
+			<instanceElementDesc name="[0]">
+				<comment>REGLAGE IHM ANGLE 0°</comment>
+			</instanceElementDesc>
+			<instanceElementDesc name="[1]">
+				<comment>REGLAGE IHM ANGLE 90°</comment>
+			</instanceElementDesc>
+			<instanceElementDesc name="[2]">
+				<comment>REGLAGE IHM ANGLE -180</comment>
+			</instanceElementDesc>
+			<instanceElementDesc name="[3]">
+				<comment>REGLAGE IHM ANGLE -90°</comment>
+			</instanceElementDesc>
+		</variables>
+		<variables name="DFB_POSITION_DETECTOR_ROTA" typeName="DFB_POSITION_DETECTOR"></variables>
+		<variables name="hAngle" typeName="REAL" topologicalAddress="%MW140"></variables>
+	</dataBlock>
+	<DDTSource DDTName="ATV" version="0.11" dateTime="dt#2026-03-02-16:24:08">
+		<attribute name="TypeSignatureCheckSumString" value="3934"></attribute>
+		<structure>
+			<variables name="ENABLED" typeName="BOOL">
+				<comment>authorisation déblocage variateur</comment>
+			</variables>
+			<variables name="RUNFW" typeName="BOOL">
+				<comment>commande de marche avant</comment>
+			</variables>
+			<variables name="RUNRV" typeName="BOOL">
+				<comment>commande de marche arrière</comment>
+			</variables>
+			<variables name="FAULT" typeName="BOOL">
+				<comment>défaut variateur</comment>
+			</variables>
+			<variables name="HEALTH_BIT" typeName="BOOL">
+				<comment>bit de vie variateur</comment>
+			</variables>
+			<variables name="STATE" typeName="INT">
+				<comment>etat  drivecom</comment>
+			</variables>
+			<variables name="VBUS" typeName="BOOL">
+				<comment>variateur sous tention</comment>
+			</variables>
+			<variables name="SPEED_SETPOINT" typeName="REAL">
+				<comment>consigne de vitesse auto</comment>
+			</variables>
+			<variables name="JOG_SPEED" typeName="REAL">
+				<comment>consigne de vitesse manuelle</comment>
+			</variables>
+			<variables name="RATIO" typeName="REAL">
+				<comment>ratio vitesse</comment>
+			</variables>
+		</structure>
+	</DDTSource>
+	<DDTSource DDTName="T_AxisPosition" version="0.13" dateTime="dt#2026-03-02-10:39:22">
+		<attribute name="TypeSignatureCheckSumString" value="5A05"></attribute>
+		<structure>
+			<variables name="Value" typeName="DINT">
+				<comment>Position réelle capteur IO-Link [mm]</comment>
+			</variables>
+			<variables name="SET_POS" typeName="ARRAY[0..9] OF DINT">
+				<comment>Tableau réglage des positions cibles</comment>
+			</variables>
+			<variables name="Offset" typeName="DINT">
+				<comment>Réglage tolérance position [mm]</comment>
+			</variables>
+			<variables name="NbPositions" typeName="INT">
+				<comment>Nombre de positions configurées</comment>
+			</variables>
+			<variables name="bPOS" typeName="ARRAY[0..9] OF BOOL">
+				<comment>Tableau des positions cibles atteintes</comment>
+			</variables>
+			<variables name="iCurrentPos" typeName="INT">
+				<comment>Index position actuelle (-1 si aucune)</comment>
+			</variables>
+			<variables name="bInPos" typeName="BOOL">
+				<comment>bit au moins une position atteinte</comment>
+			</variables>
+			<variables name="bMoving" typeName="BOOL">
+				<comment>Déplacement en cours</comment>
+			</variables>
+			<variables name="bLimitPos" typeName="BOOL">
+				<comment>Fin de course +</comment>
+			</variables>
+			<variables name="bLimitNeg" typeName="BOOL">
+				<comment>Fin de course -</comment>
+			</variables>
+			<variables name="rawValue" typeName="DINT">
+				<comment>Position brute capteur IO-Link</comment>
+			</variables>
+			<variables name="HomePosition" typeName="DINT">
+				<comment>Position capteur a la prise d'origine (homing)</comment>
+			</variables>
+			<variables name="RelativePos" typeName="DINT">
+				<comment>Position relative après homing</comment>
+			</variables>
+			<variables name="bHOMED" typeName="BOOL">
+				<comment>Homing effectué</comment>
+			</variables>
+			<variables name="Setpoint" typeName="DINT">
+				<comment>Consigne de position</comment>
+			</variables>
+			<variables name="bError" typeName="BOOL">
+				<comment>erreur positionnement</comment>
+			</variables>
+			<variables name="rHomePosition" typeName="REAL">
+				<comment>Position capteur a la prise d'origine (homing) en valeur REAL</comment>
+			</variables>
+			<variables name="rRelativePos" typeName="REAL">
+				<comment>Position relative après homing en valeur REAL</comment>
+			</variables>
+		</structure>
+	</DDTSource>
+	<FBSource nameOfFBType="DFB_POSITION_DETECTOR" version="0.06" dateTime="dt#2026-02-24-13:19:21">
+		<attribute name="TypeCodeCheckSumString" value="1D52"></attribute>
+		<attribute name="TypeSignatureCheckSumString" value="8B2B"></attribute>
+		<attribute name="UseNewTplSignAlgo" value="TRUE"></attribute>
+		<inputParameters>
+			<variables name="ActualPosition" typeName="DINT">
+				<comment>Position réelle capteur IO-Link [mm]</comment>
+				<attribute name="PositionPin" value="1"></attribute>
+			</variables>
+			<variables name="TargetPositions" typeName="ARRAY[0..9] OF DINT">
+				<attribute name="PositionPin" value="2"></attribute>
+			</variables>
+			<variables name="Tolerance" typeName="DINT">
+				<attribute name="PositionPin" value="3"></attribute>
+			</variables>
+			<variables name="NbTargets" typeName="INT">
+				<attribute name="PositionPin" value="4"></attribute>
+			</variables>
+			<variables name="RunFW" typeName="BOOL">
+				<attribute name="PositionPin" value="6"></attribute>
+			</variables>
+			<variables name="RunRV" typeName="BOOL">
+				<attribute name="PositionPin" value="7"></attribute>
+			</variables>
+		</inputParameters>
+		<outputParameters>
+			<variables name="InPosition" typeName="ARRAY[0..9] OF BOOL">
+				<attribute name="PositionPin" value="1"></attribute>
+			</variables>
+			<variables name="CurrentPosition" typeName="INT">
+				<attribute name="PositionPin" value="2"></attribute>
+			</variables>
+			<variables name="AnyPositionReached" typeName="BOOL">
+				<attribute name="PositionPin" value="3"></attribute>
+			</variables>
+			<variables name="Moving" typeName="BOOL">
+				<attribute name="PositionPin" value="8"></attribute>
+			</variables>
+		</outputParameters>
+		<privateLocalVariables>
+			<variables name="i" typeName="INT"></variables>
+		</privateLocalVariables>
+		<FBProgram name="AXIS_POSITIONING">
+			<STSource>(* ============================================================================ *)
+(* DFB_POSITION_DETECTOR - Détection de positions uniquement                  *)
+(* Pas de gestion mouvement - Juste détection fenêtres                        *)
+(* ============================================================================ *)
+
+
+
+
+(* ============================================================================ *)
+(* LOGIQUE DE DÉTECTION                                                        *)
+(* ============================================================================ *)
+
+(* Détection mouvement *)
+Moving := RunFW OR RunRV;
+
+(* Détection de toutes les positions *)
+AnyPositionReached := FALSE;
+CurrentPosition := -1;
+
+FOR i := 0 TO (NbTargets - 1) DO
+    (* Vérification fenêtre de tolérance *)
+    InPosition[i] := 
+        (ActualPosition &gt;= (TargetPositions[i] - Tolerance)) AND 
+        (ActualPosition &lt;= (TargetPositions[i] + Tolerance));
+    
+    (* Mémorisation position actuelle *)
+    IF InPosition[i] THEN
+        AnyPositionReached := TRUE;
+        CurrentPosition := i;
+    END_IF;
+END_FOR;
+</STSource>
+		</FBProgram>
+	</FBSource>
+</STExchangeFile>

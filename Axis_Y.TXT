@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<STExchangeFile>
+	<fileHeader company="Schneider Automation" product="Control Expert V15.2 - 220711" dateTime="date_and_time#2026-11-10-14:32:30" content="Structured source file" DTDVersion="41"></fileHeader>
+	<contentHeader name="Project" version="0.0.1211" dateTime="date_and_time#2026-3-9-11:50:44"></contentHeader>
+	<program>
+		<identProgram name="Axis_Y" type="section" task="MAST" SectionOrder="8"></identProgram>
+		<STSource>(*Consigne de positionnement axe Y1 fonction du diamètre de balle*)
+IF Scaledmeasure&gt;=950 THEN
+PosY1.Setpoint:=450;
+ELSE
+PosY1.Setpoint:=(1500-diDiameter-100);
+END_IF;
+(*1590 = 2000 DE TABLE - 400 ENTRE BRAS ET CAPTEUR US - 10 marge du frein*)
+
+
+
+IF NOT PosY1.bPOS[2] AND Y1calculatedSetpoint&lt;=PosY1.Setpoint  THEN
+xMoveup:=FALSE;
+xMovedown:=TRUE;
+ELSE
+xMoveup:=FALSE;
+xMovedown:=FALSE;
+END_IF;
+
+
+(*_______________________________________________________________________________*)   
+
+(*Contrôle de décalage / rupture courroie axe Y*)
+controlAxisY := ABS(hScaledPositionY1-hScaledPositionY2);
+
+IF controlAxisY &gt;= contolAxisYsetpoint AND hControlAxisYenable THEN
+PosY1.bError:=TRUE;
+PosY2.bError:=TRUE; ELSE 
+PosY1.bError:=FALSE;
+PosY2.bError:=FALSE;
+END_IF;
+
+hSET_POSY1[2]:=Y1calculatedSetpoint;
+
+(* ============================================================================ *)
+(*                    GESTION POSITIONNEMENT AXE Y                              *)
+(*                    M/D Cage - Table de préparation                           *)
+(* ============================================================================ *)
+
+(* ============================================================================ *)
+(* INITIALISATION AXE Y1 - REGLAGE POSITION VIA HMI            		        *)
+(* ============================================================================ *)
+
+(* Configuration des positions cibles *)
+PosY1.SET_POS[0]  := hSET_POSY1[0];                 (* Position 0mm : Cage en position haute *)
+PosY1.SET_POS[1]  := hSET_POSY1[1];                 (* Position 500mm : Cage en position basse *)
+PosY1.SET_POS[2]  := PosY1.Setpoint;                (* Position xmm : fonction diametre de balle *)
+PosY1.Offset	 := hOffset_POSY1;		    (* Offset axe Y1 *)
+
+
+DFB_POSITION_DETECTOR_Y1 (
+    
+    (* ======================================================================== *)
+    (* MESURE ET CONFIGURATION                                                  *)
+    (* ======================================================================== *)
+    ActualPosition := PosY1.RelativePos,        	 (* Position réelle capteur IO-Link [mm] *)
+    TargetPositions := PosY1.SET_POS,    	         (* Tableau positions cibles [0]=0mm, [1]=350mm, [2]=900mm *)
+    NbTargets := 3,                                      (* Nombre de positions configurées *)
+    RunFW := ATV_3A2.RUNFW(*BOOL*),
+    RunRV := ATV_3A2.RUNRV(*BOOL*),
+    
+    (* ======================================================================== *)
+    (* TOLÉRANCES ET FENÊTRES DE DÉTECTION                                      *)
+    (* ======================================================================== *)
+    Tolerance := PosY1.Offset,                   (* Fenêtre validation position : ±5mm *)
+  
+   
+    (* ======================================================================== *)
+    (* SORTIES - ÉTATS MOUVEMENT ET DIAGNOSTIC                                  *)
+    (* ======================================================================== *)
+    InPosition =&gt;PosY1.bPOS,
+    (*CurrentPosition =&gt;*)
+    (*AnyPositionReached =&gt;*)
+    Moving =&gt; PosY1.bMoving                 (* Mouvement en cours *)
+
+);
+
+
+DFB_POSITION_DETECTOR_Y2 (
+    
+    (* ======================================================================== *)
+    (* MESURE ET CONFIGURATION                                                  *)
+    (* ======================================================================== *)
+    ActualPosition := PosY2.RelativePos,        	 (* Position réelle capteur IO-Link [mm] *)
+    TargetPositions := PosY2.SET_POS,    	         (* Tableau positions cibles [0]=0mm, [1]=350mm, [2]=900mm *)
+    NbTargets := 3,                                      (* Nombre de positions configurées *)
+    RunFW := ATV_3A2.RUNFW(*BOOL*),
+    RunRV := ATV_3A2.RUNRV(*BOOL*),
+    
+    (* ======================================================================== *)
+    (* TOLÉRANCES ET FENÊTRES DE DÉTECTION                                      *)
+    (* ======================================================================== *)
+    Tolerance := PosY2.Offset,                   (* Fenêtre validation position : ±5mm *)
+  
+   
+    (* ======================================================================== *)
+    (* SORTIES - ÉTATS MOUVEMENT ET DIAGNOSTIC                                  *)
+    (* ======================================================================== *)
+    InPosition =&gt;PosY2.bPOS,
+    (*CurrentPosition =&gt;*)
+    (*AnyPositionReached =&gt;*)
+    Moving =&gt; PosY2.bMoving                 (* Mouvement en cours *)
+
+);
+
+
+(*CONVERSION µm &gt; mm et cm*)
+
+(*SORTIE AXE Y1*)
+PosY1.Value		:= (PosY1.RawValue/1000);
+hScaledPositionY1	:= ABS(hBarY1Axis/10);
+Y1calculatedSetpoint	:= ABS(hBarY1Axis);
+
+(*SORTIE AXE Y2*)
+PosY2.Value		:= (PosY2.RawValue/1000);
+hScaledPositionY2	:= ABS(hBarY2Axis/10);
+</STSource>
+	</program>
+	<dataBlock>
+		<variables name="hScaledPositionY2" typeName="DINT" topologicalAddress="%MW124">
+			<comment>HMI visu en cm capteur linéaire axe Y2</comment>
+		</variables>
+		<variables name="diDiameter" typeName="DINT" topologicalAddress="%MW136"></variables>
+		<variables name="hBarY1Axis" typeName="DINT"></variables>
+		<variables name="contolAxisYsetpoint" typeName="DINT">
+			<variableInit value="10"></variableInit>
+		</variables>
+		<variables name="hControlAxisYenable" typeName="BOOL" topologicalAddress="%MW110.9">
+			<comment>HMI bouton avec ou sans contrôle de courroie</comment>
+		</variables>
+		<variables name="Scaledmeasure" typeName="DINT" topologicalAddress="%MW132">
+			<comment>Distance ultrason mm</comment>
+		</variables>
+		<variables name="xMoveup" typeName="BOOL">
+			<comment>bit demande de montée des bras</comment>
+		</variables>
+		<variables name="ATV_3A2" typeName="ATV">
+			<comment>MONTER DESCENTE CAGE BRAS (TRANSLATION Y)</comment>
+		</variables>
+		<variables name="hScaledPositionY1" typeName="DINT" topologicalAddress="%MW122">
+			<comment>HMI visu en cm capteur linéaire axe Y1</comment>
+		</variables>
+		<variables name="hSET_POSY1" typeName="ARRAY[0..3] OF DINT" topologicalAddress="%MW672">
+			<instanceElementDesc name="[0]">
+				<comment>REGLAGE IHM POSITION Y "POSITION HAUT"</comment>
+			</instanceElementDesc>
+			<instanceElementDesc name="[1]">
+				<comment>REGLAGE IHM POSITION Y "BASSE"</comment>
+			</instanceElementDesc>
+			<instanceElementDesc name="[2]">
+				<comment>CONSIGNE DE POSITIONEMENT BALLE</comment>
+			</instanceElementDesc>
+		</variables>
+		<variables name="DFB_POSITION_DETECTOR_Y1" typeName="DFB_POSITION_DETECTOR"></variables>
+		<variables name="Y1calculatedSetpoint" typeName="DINT"></variables>
+		<variables name="DFB_POSITION_DETECTOR_Y2" typeName="DFB_POSITION_DETECTOR"></variables>
+		<variables name="xMovedown" typeName="BOOL">
+			<comment>bit demande de descente des bras</comment>
+		</variables>
+		<variables name="hOffset_POSY1" typeName="DINT" topologicalAddress="%MW666"></variables>
+		<variables name="hBarY2Axis" typeName="DINT"></variables>
+		<variables name="controlAxisY" typeName="DINT"></variables>
+		<variables name="PosY1" typeName="T_AxisPosition">
+			<instanceElementDesc name="bLimitNeg">
+				<comment>Fin de course haut</comment>
+			</instanceElementDesc>
+			<instanceElementDesc name="bLimitPos">
+				<comment>Fin de course bas</comment>
+			</instanceElementDesc>
+		</variables>
+		<variables name="PosY2" typeName="T_AxisPosition">
+			<instanceElementDesc name="bLimitNeg">
+				<comment>Fin de course haut</comment>
+			</instanceElementDesc>
+			<instanceElementDesc name="bLimitPos">
+				<comment>Fin de course bas</comment>
+			</instanceElementDesc>
+		</variables>
+	</dataBlock>
+	<DDTSource DDTName="ATV" version="0.11" dateTime="dt#2026-03-02-16:24:08">
+		<attribute name="TypeSignatureCheckSumString" value="3934"></attribute>
+		<structure>
+			<variables name="ENABLED" typeName="BOOL">
+				<comment>authorisation déblocage variateur</comment>
+			</variables>
+			<variables name="RUNFW" typeName="BOOL">
+				<comment>commande de marche avant</comment>
+			</variables>
+			<variables name="RUNRV" typeName="BOOL">
+				<comment>commande de marche arrière</comment>
+			</variables>
+			<variables name="FAULT" typeName="BOOL">
+				<comment>défaut variateur</comment>
+			</variables>
+			<variables name="HEALTH_BIT" typeName="BOOL">
+				<comment>bit de vie variateur</comment>
+			</variables>
+			<variables name="STATE" typeName="INT">
+				<comment>etat  drivecom</comment>
+			</variables>
+			<variables name="VBUS" typeName="BOOL">
+				<comment>variateur sous tention</comment>
+			</variables>
+			<variables name="SPEED_SETPOINT" typeName="REAL">
+				<comment>consigne de vitesse auto</comment>
+			</variables>
+			<variables name="JOG_SPEED" typeName="REAL">
+				<comment>consigne de vitesse manuelle</comment>
+			</variables>
+			<variables name="RATIO" typeName="REAL">
+				<comment>ratio vitesse</comment>
+			</variables>
+		</structure>
+	</DDTSource>
+	<FBSource nameOfFBType="DFB_POSITION_DETECTOR" version="0.06" dateTime="dt#2026-02-24-13:19:21">
+		<attribute name="TypeCodeCheckSumString" value="1D52"></attribute>
+		<attribute name="TypeSignatureCheckSumString" value="8B2B"></attribute>
+		<attribute name="UseNewTplSignAlgo" value="TRUE"></attribute>
+		<inputParameters>
+			<variables name="ActualPosition" typeName="DINT">
+				<comment>Position réelle capteur IO-Link [mm]</comment>
+				<attribute name="PositionPin" value="1"></attribute>
+			</variables>
+			<variables name="TargetPositions" typeName="ARRAY[0..9] OF DINT">
+				<attribute name="PositionPin" value="2"></attribute>
+			</variables>
+			<variables name="Tolerance" typeName="DINT">
+				<attribute name="PositionPin" value="3"></attribute>
+			</variables>
+			<variables name="NbTargets" typeName="INT">
+				<attribute name="PositionPin" value="4"></attribute>
+			</variables>
+			<variables name="RunFW" typeName="BOOL">
+				<attribute name="PositionPin" value="6"></attribute>
+			</variables>
+			<variables name="RunRV" typeName="BOOL">
+				<attribute name="PositionPin" value="7"></attribute>
+			</variables>
+		</inputParameters>
+		<outputParameters>
+			<variables name="InPosition" typeName="ARRAY[0..9] OF BOOL">
+				<attribute name="PositionPin" value="1"></attribute>
+			</variables>
+			<variables name="CurrentPosition" typeName="INT">
+				<attribute name="PositionPin" value="2"></attribute>
+			</variables>
+			<variables name="AnyPositionReached" typeName="BOOL">
+				<attribute name="PositionPin" value="3"></attribute>
+			</variables>
+			<variables name="Moving" typeName="BOOL">
+				<attribute name="PositionPin" value="8"></attribute>
+			</variables>
+		</outputParameters>
+		<privateLocalVariables>
+			<variables name="i" typeName="INT"></variables>
+		</privateLocalVariables>
+		<FBProgram name="AXIS_POSITIONING">
+			<STSource>(* ============================================================================ *)
+(* DFB_POSITION_DETECTOR - Détection de positions uniquement                  *)
+(* Pas de gestion mouvement - Juste détection fenêtres                        *)
+(* ============================================================================ *)
+
+
+
+
+(* ============================================================================ *)
+(* LOGIQUE DE DÉTECTION                                                        *)
+(* ============================================================================ *)
+
+(* Détection mouvement *)
+Moving := RunFW OR RunRV;
+
+(* Détection de toutes les positions *)
+AnyPositionReached := FALSE;
+CurrentPosition := -1;
+
+FOR i := 0 TO (NbTargets - 1) DO
+    (* Vérification fenêtre de tolérance *)
+    InPosition[i] := 
+        (ActualPosition &gt;= (TargetPositions[i] - Tolerance)) AND 
+        (ActualPosition &lt;= (TargetPositions[i] + Tolerance));
+    
+    (* Mémorisation position actuelle *)
+    IF InPosition[i] THEN
+        AnyPositionReached := TRUE;
+        CurrentPosition := i;
+    END_IF;
+END_FOR;
+</STSource>
+		</FBProgram>
+	</FBSource>
+	<DDTSource DDTName="T_AxisPosition" version="0.13" dateTime="dt#2026-03-02-10:39:22">
+		<attribute name="TypeSignatureCheckSumString" value="5A05"></attribute>
+		<structure>
+			<variables name="Value" typeName="DINT">
+				<comment>Position réelle capteur IO-Link [mm]</comment>
+			</variables>
+			<variables name="SET_POS" typeName="ARRAY[0..9] OF DINT">
+				<comment>Tableau réglage des positions cibles</comment>
+			</variables>
+			<variables name="Offset" typeName="DINT">
+				<comment>Réglage tolérance position [mm]</comment>
+			</variables>
+			<variables name="NbPositions" typeName="INT">
+				<comment>Nombre de positions configurées</comment>
+			</variables>
+			<variables name="bPOS" typeName="ARRAY[0..9] OF BOOL">
+				<comment>Tableau des positions cibles atteintes</comment>
+			</variables>
+			<variables name="iCurrentPos" typeName="INT">
+				<comment>Index position actuelle (-1 si aucune)</comment>
+			</variables>
+			<variables name="bInPos" typeName="BOOL">
+				<comment>bit au moins une position atteinte</comment>
+			</variables>
+			<variables name="bMoving" typeName="BOOL">
+				<comment>Déplacement en cours</comment>
+			</variables>
+			<variables name="bLimitPos" typeName="BOOL">
+				<comment>Fin de course +</comment>
+			</variables>
+			<variables name="bLimitNeg" typeName="BOOL">
+				<comment>Fin de course -</comment>
+			</variables>
+			<variables name="rawValue" typeName="DINT">
+				<comment>Position brute capteur IO-Link</comment>
+			</variables>
+			<variables name="HomePosition" typeName="DINT">
+				<comment>Position capteur a la prise d'origine (homing)</comment>
+			</variables>
+			<variables name="RelativePos" typeName="DINT">
+				<comment>Position relative après homing</comment>
+			</variables>
+			<variables name="bHOMED" typeName="BOOL">
+				<comment>Homing effectué</comment>
+			</variables>
+			<variables name="Setpoint" typeName="DINT">
+				<comment>Consigne de position</comment>
+			</variables>
+			<variables name="bError" typeName="BOOL">
+				<comment>erreur positionnement</comment>
+			</variables>
+			<variables name="rHomePosition" typeName="REAL">
+				<comment>Position capteur a la prise d'origine (homing) en valeur REAL</comment>
+			</variables>
+			<variables name="rRelativePos" typeName="REAL">
+				<comment>Position relative après homing en valeur REAL</comment>
+			</variables>
+		</structure>
+	</DDTSource>
+</STExchangeFile>

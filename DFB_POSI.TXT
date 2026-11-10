@@ -1,0 +1,31 @@
+(* ============================================================================ *)
+(* DFB_POSITION_DETECTOR - Détection de positions uniquement                  *)
+(* Pas de gestion mouvement - Juste détection fenêtres                        *)
+(* ============================================================================ *)
+
+
+
+
+(* ============================================================================ *)
+(* LOGIQUE DE DÉTECTION                                                        *)
+(* ============================================================================ *)
+
+(* Détection mouvement *)
+Moving := RunFW OR RunRV;
+
+(* Détection de toutes les positions *)
+AnyPositionReached := FALSE;
+CurrentPosition := -1;
+
+FOR i := 0 TO (NbTargets - 1) DO
+    (* Vérification fenêtre de tolérance *)
+    InPosition[i] := 
+        (ActualPosition >= (TargetPositions[i] - Tolerance)) AND 
+        (ActualPosition <= (TargetPositions[i] + Tolerance));
+    
+    (* Mémorisation position actuelle *)
+    IF InPosition[i] THEN
+        AnyPositionReached := TRUE;
+        CurrentPosition := i;
+    END_IF;
+END_FOR;

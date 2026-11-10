@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<STExchangeFile>
+	<fileHeader company="Schneider Automation" product="Control Expert V15.2 - 220711" dateTime="date_and_time#2026-11-10-14:33:3" content="Structured source file" DTDVersion="41"></fileHeader>
+	<contentHeader name="Project" version="0.0.1211" dateTime="date_and_time#2026-3-9-11:50:44"></contentHeader>
+	<program>
+		<identProgram name="ALARMS_EVENTS" type="section" task="MAST" SectionOrder="19"></identProgram>
+		<STSource>(*===============================================================
+ EVENT WORD 1 — HMI
+===============================================================
+*)
+
+wEVENTS.0 := NOT(iSafetyATU);              (* E-stop reset required (101K1/K2)                 *)
+(* wEVENTS.1 := NOT(iSafetyRelay2) AND NOT(SFC_X[6]);  (* Light curtain fault/masked (101K3/K4) *)
+wEVENTS.2 := NOT(iSAFETY_DIAG);            (* Door safety not OK                               *)
+
+
+(*
+===============================================================
+ ALARM WORD 1 — HMI
+===============================================================
+*)
+
+(* --------- Disjoncteurs / Brake release faults  --------- *)
+wALARMS.0 := (NOT(iERR_5Q1) OR (wALARMS.0 AND NOT hBpFaultAck)) AND iSafetyATU;
+                                                  (* Brake motor rotation OCP (5Q1)               *)
+
+wALARMS.1 := (NOT(iERR_5Q2) OR (wALARMS.1 AND NOT hBpFaultAck)) AND iSafetyATU;
+                                                  (* Brake motor Y-axis OCP (5Q2)                 *)
+
+wALARMS.2 := (NOT(iERR_5Q3) OR (wALARMS.2 AND NOT hBpFaultAck)) AND iSafetyATU;
+                                                  (* Brake motor X-axis OCP (5Q3)                 *)
+
+wALARMS.3 := (NOT(iERR_5Q4) OR (wALARMS.3 AND NOT hBpFaultAck)) AND iSafetyATU;
+                                                  (* Brake motor belt OCP (5Q4)                   *)
+
+
+(* ----------- Motor breakers OCP  ------------------- *)
+wALARMS.4 := iERR_3Q2 OR (wALARMS.4 AND NOT hBpFaultAck);
+                                                  (* Motor breaker rotation (3Q2)                 *)
+
+wALARMS.5 := iERR_3Q3 OR (wALARMS.5 AND NOT hBpFaultAck);
+                                                  (* Motor breaker Y translation (3Q3)            *)
+
+wALARMS.6 := iERR_4Q1 OR (wALARMS.6 AND NOT hBpFaultAck);
+                                                  (* Motor breaker X translation (4Q1)            *)
+
+wALARMS.7 := iERR_4Q2 OR (wALARMS.7 AND NOT hBpFaultAck);
+                                                  (* Motor breaker belt (4Q2)                     *)
+
+
+(* ---------------- Belt deviation / mechanical --------------- *)
+wALARMS.8 := (PosY1.bError OR PosY2.bError);      
+                                                  (* Belt misalignment alarm                      *)
+
+
+(*
+===============================================================
+ DRIVE FAULTS — Variateurs
+===============================================================
+*)
+
+wALARMS.9  := ATV_3A1.FAULT OR (wALARMS.9  AND NOT hBpFaultAck);
+                                                  (* Drive fault rotation  (3A1)                  *)
+
+wALARMS.10 := ATV_3A2.FAULT OR (wALARMS.10 AND NOT hBpFaultAck);
+                                                  (* Drive fault Y-translation (3A2)              *)
+
+wALARMS.11 := ATV_4A1.FAULT OR (wALARMS.11 AND NOT hBpFaultAck);
+                                                  (* Drive fault X-translation (4A1)              *)
+
+wALARMS.12 := ATV_4A2.FAULT OR (wALARMS.12 AND NOT hBpFaultAck);
+                                                  (* Drive fault belt (4A2)                       *)
+
+
+</STSource>
+	</program>
+	<dataBlock>
+		<variables name="iERR_5Q4" typeName="EBOOL">
+			<comment>Entrée retour déclenchement frein tapis</comment>
+		</variables>
+		<variables name="ATV_4A2" typeName="ATV">
+			<comment>TAPIS</comment>
+		</variables>
+		<variables name="iERR_5Q2" typeName="EBOOL">
+			<comment>Entrée retour déclenchement frein translation Y</comment>
+		</variables>
+		<variables name="wALARMS" typeName="WORD" topologicalAddress="%MW300">
+			<comment>MOT D'ALARMES</comment>
+		</variables>
+		<variables name="ATV_4A1" typeName="ATV">
+			<comment>DEPLACEMENT CAGE (TRANSLATION X)</comment>
+		</variables>
+		<variables name="ATV_3A2" typeName="ATV">
+			<comment>MONTER DESCENTE CAGE BRAS (TRANSLATION Y)</comment>
+		</variables>
+		<variables name="iERR_5Q3" typeName="EBOOL">
+			<comment>Entrée retour déclenchement frein translation X</comment>
+		</variables>
+		<variables name="ATV_3A1" typeName="ATV">
+			<comment>ROTATION TOURELLE</comment>
+		</variables>
+		<variables name="iERR_4Q2" typeName="EBOOL">
+			<comment>Entrée retour défaut disjoncteur moteur tapis</comment>
+		</variables>
+		<variables name="wEVENTS" typeName="WORD" topologicalAddress="%MW310">
+			<comment>MOT D'EVENEMENTS</comment>
+		</variables>
+		<variables name="iSAFETY_DIAG" typeName="EBOOL">
+			<comment>Entrée info etat sécurité de porte arrière schmersal</comment>
+		</variables>
+		<variables name="iSafetyATU" typeName="EBOOL">
+			<comment>Entrée retour relais de sécurité arrêt d'urgence</comment>
+		</variables>
+		<variables name="hBpFaultAck" typeName="BOOL" topologicalAddress="%MW110.2">
+			<comment>HMI bouton réarmement défaut</comment>
+		</variables>
+		<variables name="PosY1" typeName="T_AxisPosition">
+			<instanceElementDesc name="bLimitNeg">
+				<comment>Fin de course haut</comment>
+			</instanceElementDesc>
+			<instanceElementDesc name="bLimitPos">
+				<comment>Fin de course bas</comment>
+			</instanceElementDesc>
+		</variables>
+		<variables name="PosY2" typeName="T_AxisPosition">
+			<instanceElementDesc name="bLimitNeg">
+				<comment>Fin de course haut</comment>
+			</instanceElementDesc>
+			<instanceElementDesc name="bLimitPos">
+				<comment>Fin de course bas</comment>
+			</instanceElementDesc>
+		</variables>
+		<variables name="iERR_3Q2" typeName="EBOOL">
+			<comment>Entrée retour défaut disjoncteur moteur rotation tourelle</comment>
+		</variables>
+		<variables name="iERR_3Q3" typeName="EBOOL">
+			<comment>Entrée retour défaut disjoncteur moteur translation Y</comment>
+		</variables>
+		<variables name="iERR_5Q1" typeName="EBOOL">
+			<comment>Entrée retour déclenchement frein rotation</comment>
+		</variables>
+		<variables name="iERR_4Q1" typeName="EBOOL">
+			<comment>Entrée retour défaut disjoncteur moteur translation X</comment>
+		</variables>
+	</dataBlock>
+	<DDTSource DDTName="ATV" version="0.11" dateTime="dt#2026-03-02-16:24:08">
+		<attribute name="TypeSignatureCheckSumString" value="3934"></attribute>
+		<structure>
+			<variables name="ENABLED" typeName="BOOL">
+				<comment>authorisation déblocage variateur</comment>
+			</variables>
+			<variables name="RUNFW" typeName="BOOL">
+				<comment>commande de marche avant</comment>
+			</variables>
+			<variables name="RUNRV" typeName="BOOL">
+				<comment>commande de marche arrière</comment>
+			</variables>
+			<variables name="FAULT" typeName="BOOL">
+				<comment>défaut variateur</comment>
+			</variables>
+			<variables name="HEALTH_BIT" typeName="BOOL">
+				<comment>bit de vie variateur</comment>
+			</variables>
+			<variables name="STATE" typeName="INT">
+				<comment>etat  drivecom</comment>
+			</variables>
+			<variables name="VBUS" typeName="BOOL">
+				<comment>variateur sous tention</comment>
+			</variables>
+			<variables name="SPEED_SETPOINT" typeName="REAL">
+				<comment>consigne de vitesse auto</comment>
+			</variables>
+			<variables name="JOG_SPEED" typeName="REAL">
+				<comment>consigne de vitesse manuelle</comment>
+			</variables>
+			<variables name="RATIO" typeName="REAL">
+				<comment>ratio vitesse</comment>
+			</variables>
+		</structure>
+	</DDTSource>
+	<DDTSource DDTName="T_AxisPosition" version="0.13" dateTime="dt#2026-03-02-10:39:22">
+		<attribute name="TypeSignatureCheckSumString" value="5A05"></attribute>
+		<structure>
+			<variables name="Value" typeName="DINT">
+				<comment>Position réelle capteur IO-Link [mm]</comment>
+			</variables>
+			<variables name="SET_POS" typeName="ARRAY[0..9] OF DINT">
+				<comment>Tableau réglage des positions cibles</comment>
+			</variables>
+			<variables name="Offset" typeName="DINT">
+				<comment>Réglage tolérance position [mm]</comment>
+			</variables>
+			<variables name="NbPositions" typeName="INT">
+				<comment>Nombre de positions configurées</comment>
+			</variables>
+			<variables name="bPOS" typeName="ARRAY[0..9] OF BOOL">
+				<comment>Tableau des positions cibles atteintes</comment>
+			</variables>
+			<variables name="iCurrentPos" typeName="INT">
+				<comment>Index position actuelle (-1 si aucune)</comment>
+			</variables>
+			<variables name="bInPos" typeName="BOOL">
+				<comment>bit au moins une position atteinte</comment>
+			</variables>
+			<variables name="bMoving" typeName="BOOL">
+				<comment>Déplacement en cours</comment>
+			</variables>
+			<variables name="bLimitPos" typeName="BOOL">
+				<comment>Fin de course +</comment>
+			</variables>
+			<variables name="bLimitNeg" typeName="BOOL">
+				<comment>Fin de course -</comment>
+			</variables>
+			<variables name="rawValue" typeName="DINT">
+				<comment>Position brute capteur IO-Link</comment>
+			</variables>
+			<variables name="HomePosition" typeName="DINT">
+				<comment>Position capteur a la prise d'origine (homing)</comment>
+			</variables>
+			<variables name="RelativePos" typeName="DINT">
+				<comment>Position relative après homing</comment>
+			</variables>
+			<variables name="bHOMED" typeName="BOOL">
+				<comment>Homing effectué</comment>
+			</variables>
+			<variables name="Setpoint" typeName="DINT">
+				<comment>Consigne de position</comment>
+			</variables>
+			<variables name="bError" typeName="BOOL">
+				<comment>erreur positionnement</comment>
+			</variables>
+			<variables name="rHomePosition" typeName="REAL">
+				<comment>Position capteur a la prise d'origine (homing) en valeur REAL</comment>
+			</variables>
+			<variables name="rRelativePos" typeName="REAL">
+				<comment>Position relative après homing en valeur REAL</comment>
+			</variables>
+		</structure>
+	</DDTSource>
+</STExchangeFile>

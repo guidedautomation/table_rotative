@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<STExchangeFile>
+	<fileHeader company="Schneider Automation" product="Control Expert V15.2 - 220711" dateTime="date_and_time#2026-11-10-14:2:13" content="Structured source file" DTDVersion="41"></fileHeader>
+	<contentHeader name="Project" version="0.0.1211" dateTime="date_and_time#2026-3-9-11:50:44"></contentHeader>
+	<program>
+		<identProgram name="Diameter_calculation" type="section" task="MAST" SectionOrder="4"></identProgram>
+		<STSource>(*MISE A L'ECHELLE DE LA MESURE CAPTEUR ULTRASON EN MM*)
+Scaledmeasure:=BUS007J_measure/10;
+
+(*MESURE US TABLE A VIDE*)
+hUS0:=2000;
+
+(*DELTA US &lt;&gt; BRAS*)
+hDeltaUS_Bras:=400;
+
+
+(*MESURE DIAMETRE DE BALLE*)
+diDiameter:=hUS0-minDelta;
+
+writeTable:=%S6;
+
+IF RE(writeTable) THEN
+indexTable:=indexTable+1; 
+END_IF;
+
+IF indexTable&gt;29 THEN
+indexTable:=0 ;
+END_IF;
+
+IF Scaledmeasure&lt;=950 AND Scaledmeasure&gt;=450 THEN
+deltaTable[indexTable] := MOVE (IN := Scaledmeasure);
+END_IF;
+
+minDelta:=MIN_DINT(
+IN1:=deltaTable[0], IN2:=deltaTable[1], IN3:=deltaTable[2], IN4:=deltaTable[3], IN5:=deltaTable[4], IN6:=deltaTable[5], IN7:=deltaTable[6],
+IN8:=deltaTable[7], IN9:=deltaTable[8], IN10:=deltaTable[9], IN11:=deltaTable[10], IN12:=deltaTable[11], IN13:=deltaTable[12], IN14:=deltaTable[13],
+IN15:=deltaTable[14], IN16:=deltaTable[15], IN17:=deltaTable[16], IN18:=deltaTable[17], IN19:=deltaTable[18], IN20:=deltaTable[19], IN21:=deltaTable[20],
+IN22:=deltaTable[21], IN23:=deltaTable[22], IN24:=deltaTable[23], IN25:=deltaTable[24], IN26:=deltaTable[25], IN27:=deltaTable[26], IN28:=deltaTable[27],
+IN29:=deltaTable[28], IN30:=deltaTable[29]);
+
+
+</STSource>
+	</program>
+	<dataBlock>
+		<variables name="writeTable" typeName="EBOOL"></variables>
+		<variables name="indexTable" typeName="INT"></variables>
+		<variables name="diDiameter" typeName="DINT" topologicalAddress="%MW136"></variables>
+		<variables name="minDelta" typeName="DINT"></variables>
+		<variables name="Scaledmeasure" typeName="DINT" topologicalAddress="%MW132">
+			<comment>Distance ultrason mm</comment>
+		</variables>
+		<variables name="deltaTable" typeName="ARRAY[0..29] OF DINT"></variables>
+		<variables name="hDeltaUS_Bras" typeName="DINT" topologicalAddress="%MW138">
+			<comment>HMI réglage delta entre capteur US et systeme bras</comment>
+			<variableInit value="400"></variableInit>
+		</variables>
+		<variables name="BUS007J_measure" typeName="DINT">
+			<comment>Valeur brute mesure de disance sortie ultrason</comment>
+		</variables>
+		<variables name="hUS0" typeName="DINT" topologicalAddress="%MW134">
+			<comment>HMI réglage valeur hauteur entre US et table de reserve vide </comment>
+			<variableInit value="2100"></variableInit>
+		</variables>
+	</dataBlock>
+</STExchangeFile>

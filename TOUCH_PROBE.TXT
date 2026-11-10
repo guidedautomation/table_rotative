@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<STExchangeFile>
+	<fileHeader company="Schneider Automation" product="Control Expert V15.2 - 220711" dateTime="date_and_time#2026-11-10-14:2:17" content="Structured source file" DTDVersion="41"></fileHeader>
+	<contentHeader name="Project" version="0.0.1211" dateTime="date_and_time#2026-3-9-11:50:44"></contentHeader>
+	<program>
+		<identProgram name="TOUCH_PROBE" type="section" task="MAST" SectionOrder="5"></identProgram>
+		<STSource>(* ============================================================================ *)
+(* APPRENTISSAGE DES POSITIONS - AXE X TRANSLATION CAGE                         *)
+(* ============================================================================ *)
+
+(* ---------------------------------------------------------------------------- *)
+(* TEACH POINT 0mm - PRISE D'ORIGINE                                            *)
+(* ---------------------------------------------------------------------------- *)
+IF hTP_POSX THEN
+    PosX.HomePosition := PosX.Value;           (* Mémorisation position capteur = origine *)
+    PosX.bHOMED := TRUE;                       (* Axe référencé ✓ *)
+END_IF;
+
+(* ---------------------------------------------------------------------------- *)
+(* CALCUL POSITION RELATIVE (corrigé)                                           *)
+(* ---------------------------------------------------------------------------- *)
+IF PosX.bHOMED THEN
+    PosX.RelativePos := PosX.Value - PosX.HomePosition;  (* Position relative à l'origine *)
+ELSE
+    PosX.RelativePos := 0;                               (* Pas de calcul si pas référencé *)
+END_IF;
+
+
+(* ============================================================================ *)
+(* APPRENTISSAGE DES POSITIONS - AXE Y M/D CAGE                                 *)
+(* ============================================================================ *)
+
+(* ---------------------------------------------------------------------------- *)
+(* TEACH POINT 0mm - PRISE D'ORIGINE                                            *)
+(* ---------------------------------------------------------------------------- *)
+IF hTP_POSY THEN
+    PosY1.HomePosition := PosY1.Value;           (* Mémorisation position capteur = origine *)
+    PosY2.HomePosition := PosY2.Value;
+    PosY1.bHOMED := TRUE;                        (* Axe référencé ✓ *)
+    PosY2.bHOMED := TRUE;
+END_IF;
+
+(* ----------------------------------------------------------------------------*)
+(* CALCUL POSITION RELATIVE (corrigé)                                          *)
+(* ----------------------------------------------------------------------------*)
+IF PosY1.bHOMED THEN
+    PosY1.RelativePos := PosY1.Value - PosY1.HomePosition;  (* Position relative à l'origine *)
+ELSE
+    PosY1.RelativePos := 0;                                 (* Pas de calcul si pas référencé *)
+END_IF;
+
+IF PosY2.bHOMED THEN
+    PosY2.RelativePos := PosY2.Value - PosY2.HomePosition;  (* Position relative à l'origine *)
+ELSE
+    PosY2.RelativePos := 0;                                 (* Pas de calcul si pas référencé *)
+END_IF;
+
+
+(* ============================================================================ *)
+(* APPRENTISSAGE DES POSITIONS - ROTATION TRANSLATION CAGE                      *)
+(* ============================================================================ *)
+
+(* ---------------------------------------------------------------------------- *)
+(* TEACH POINT 0° - PRISE D'ORIGINE                                             *)
+(* ---------------------------------------------------------------------------- *)
+IF hTP_ROTA THEN
+    Rota.rHomePosition := rAngle;           (* Mémorisation position capteur = origine *)
+    Rota.bHOMED := TRUE;                       (* Axe référencé ✓ *)
+END_IF;
+
+(* ---------------------------------------------------------------------------- *)
+(* CALCUL POSITION RELATIVE (corrigé)                                           *)
+(* ---------------------------------------------------------------------------- *)
+IF Rota.bHOMED THEN
+    Rota.rRelativePos := Rota.rHomePosition - rAngle ;  (* Position relative à l'origine *)
+ELSE
+    Rota.rRelativePos := 0.0;                               (* Pas de calcul si pas référencé *)
+END_IF;
+
+(*=====================================================*)
+(*   TEACH POSITIONS (prise d'origine)                 *)
+(*=====================================================*)
+
+IF hTP_ROTA THEN
+    
+    (* Pos 0 : 0° (position actuelle = origine) *)
+    Rota.SET_POS[0] := REAL_TO_DINT(Rota.rRelativePos);
+    
+    (* Pos 1 : +90° *)
+    Rota.SET_POS[1] := Rota.SET_POS[0] + 90;
+    
+    (* Pos 2 : -90° *)
+    Rota.SET_POS[3] := Rota.SET_POS[0] - 90;
+    
+    (* Pos 3 : -180° *)
+    Rota.SET_POS[2] := Rota.SET_POS[0] - (90 * 2);
+    
+   
+END_IF;
+
+</STSource>
+	</program>
+	<dataBlock>
+		<variables name="hTP_ROTA" typeName="BOOL" topologicalAddress="%MW110.3">
+			<comment>HMI bouton apprentissage point zéro codeur</comment>
+		</variables>
+		<variables name="PosX" typeName="T_AxisPosition">
+			<instanceElementDesc name="bPOS">
+				<instanceElementDesc name="[0]">
+					<comment>Position chargement</comment>
+				</instanceElementDesc>
+				<instanceElementDesc name="[1]">
+					<comment>Position centrale</comment>
+				</instanceElementDesc>
+				<instanceElementDesc name="[2]">
+					<comment>Position déchargement</comment>
+				</instanceElementDesc>
+			</instanceElementDesc>
+			<instanceElementDesc name="SET_POS">
+				<instanceElementDesc name="[0]">
+					<comment>Réglage valeur position chargement</comment>
+				</instanceElementDesc>
+				<instanceElementDesc name="[1]">
+					<comment>Réglage valeur position centrale</comment>
+				</instanceElementDesc>
+				<instanceElementDesc name="[2]">
+					<comment>Réglage valeur position déchargement</comment>
+				</instanceElementDesc>
+			</instanceElementDesc>
+			<instanceElementDesc name="Value">
+				<comment>valeur convertie mm capteur lineaire axe X </comment>
+			</instanceElementDesc>
+			<instanceElementDesc name="Offset">
+				<comment>réglage offset axe X</comment>
+			</instanceElementDesc>
+		</variables>
+		<variables name="hTP_POSX" typeName="BOOL" topologicalAddress="%MW110.6">
+			<comment>HMI bouton apprentissage point zéro axe X</comment>
+		</variables>
+		<variables name="hTP_POSY" typeName="BOOL" topologicalAddress="%MW110.7">
+			<comment>HMI bouton apprentissage point zéro axe Y</comment>
+		</variables>
+		<variables name="Rota" typeName="T_AxisPosition">
+			<instanceElementDesc name="bLimitNeg">
+				<comment>Fin de course rotation anti-horaire</comment>
+			</instanceElementDesc>
+			<instanceElementDesc name="bLimitPos">
+				<comment>Fin de course rotation horaire</comment>
+			</instanceElementDesc>
+			<instanceElementDesc name="SET_POS">
+				<instanceElementDesc name="[0]">
+					<comment>Reglage position 0°</comment>
+				</instanceElementDesc>
+				<instanceElementDesc name="[1]">
+					<comment>Reglage position 90°</comment>
+				</instanceElementDesc>
+				<instanceElementDesc name="[2]">
+					<comment>Reglage position -180°</comment>
+				</instanceElementDesc>
+				<instanceElementDesc name="[3]">
+					<comment>Reglage position -90°</comment>
+				</instanceElementDesc>
+			</instanceElementDesc>
+			<instanceElementDesc name="bPOS">
+				<instanceElementDesc name="[0]">
+					<comment>Position 0°</comment>
+				</instanceElementDesc>
+				<instanceElementDesc name="[1]">
+					<comment>Position 90°</comment>
+				</instanceElementDesc>
+				<instanceElementDesc name="[2]">
+					<comment>Position -180°</comment>
+				</instanceElementDesc>
+				<instanceElementDesc name="[3]">
+					<comment>Position -90°</comment>
+				</instanceElementDesc>
+			</instanceElementDesc>
+		</variables>
+		<variables name="rAngle" typeName="REAL">
+			<comment>Equivalence angulaire de la rotation</comment>
+		</variables>
+		<variables name="PosY1" typeName="T_AxisPosition">
+			<instanceElementDesc name="bLimitNeg">
+				<comment>Fin de course haut</comment>
+			</instanceElementDesc>
+			<instanceElementDesc name="bLimitPos">
+				<comment>Fin de course bas</comment>
+			</instanceElementDesc>
+		</variables>
+		<variables name="PosY2" typeName="T_AxisPosition">
+			<instanceElementDesc name="bLimitNeg">
+				<comment>Fin de course haut</comment>
+			</instanceElementDesc>
+			<instanceElementDesc name="bLimitPos">
+				<comment>Fin de course bas</comment>
+			</instanceElementDesc>
+		</variables>
+	</dataBlock>
+	<DDTSource DDTName="T_AxisPosition" version="0.13" dateTime="dt#2026-03-02-10:39:22">
+		<attribute name="TypeSignatureCheckSumString" value="5A05"></attribute>
+		<structure>
+			<variables name="Value" typeName="DINT">
+				<comment>Position réelle capteur IO-Link [mm]</comment>
+			</variables>
+			<variables name="SET_POS" typeName="ARRAY[0..9] OF DINT">
+				<comment>Tableau réglage des positions cibles</comment>
+			</variables>
+			<variables name="Offset" typeName="DINT">
+				<comment>Réglage tolérance position [mm]</comment>
+			</variables>
+			<variables name="NbPositions" typeName="INT">
+				<comment>Nombre de positions configurées</comment>
+			</variables>
+			<variables name="bPOS" typeName="ARRAY[0..9] OF BOOL">
+				<comment>Tableau des positions cibles atteintes</comment>
+			</variables>
+			<variables name="iCurrentPos" typeName="INT">
+				<comment>Index position actuelle (-1 si aucune)</comment>
+			</variables>
+			<variables name="bInPos" typeName="BOOL">
+				<comment>bit au moins une position atteinte</comment>
+			</variables>
+			<variables name="bMoving" typeName="BOOL">
+				<comment>Déplacement en cours</comment>
+			</variables>
+			<variables name="bLimitPos" typeName="BOOL">
+				<comment>Fin de course +</comment>
+			</variables>
+			<variables name="bLimitNeg" typeName="BOOL">
+				<comment>Fin de course -</comment>
+			</variables>
+			<variables name="rawValue" typeName="DINT">
+				<comment>Position brute capteur IO-Link</comment>
+			</variables>
+			<variables name="HomePosition" typeName="DINT">
+				<comment>Position capteur a la prise d'origine (homing)</comment>
+			</variables>
+			<variables name="RelativePos" typeName="DINT">
+				<comment>Position relative après homing</comment>
+			</variables>
+			<variables name="bHOMED" typeName="BOOL">
+				<comment>Homing effectué</comment>
+			</variables>
+			<variables name="Setpoint" typeName="DINT">
+				<comment>Consigne de position</comment>
+			</variables>
+			<variables name="bError" typeName="BOOL">
+				<comment>erreur positionnement</comment>
+			</variables>
+			<variables name="rHomePosition" typeName="REAL">
+				<comment>Position capteur a la prise d'origine (homing) en valeur REAL</comment>
+			</variables>
+			<variables name="rRelativePos" typeName="REAL">
+				<comment>Position relative après homing en valeur REAL</comment>
+			</variables>
+		</structure>
+	</DDTSource>
+</STExchangeFile>
